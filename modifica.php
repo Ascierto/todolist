@@ -35,12 +35,19 @@ include __DIR__ .'/includes/Memo.php';
                 <label class="form-label" for="promemoria">Memo</label>
                 <input class="form-control" type="text" name="promemoria" id="promemoria" value="<?php echo $promemoria[0]['promemoria']; ?>">
 
-                <label class="form-label" for="priorità">Priorità</label>
-                <input class="form-control" type="number" name="priorità" id="priorità" value="<?php echo $promemoria[0]['priorità']; ?>">
+                <label class="form-label">Seleziona priorità</label>
+                <select name="priorità" class="form-select">
+                    <option value="Bassa">Bassa</option>
+                    <option value="Media">Media</option>
+                    <option value="Alta">Alta</option>
+                </select>
 
-                <label class="form-label" for="completato">Done</label>
-                <input class="form-control" type="number" name="completato" id="completato" value="<?php echo $promemoria[0]['completato']; ?>">            
-
+                <label class="form-label">Fatto o da fare?</label>
+                <select name="completato" class="form-select">
+                    <option value="0">Da Fare</option>
+                    <option value="1">Fatto</option>
+                </select> 
+         
                 <input class="btn btn-outline-info my-3" type="submit" value="Invia">
                 
                 </form>              
