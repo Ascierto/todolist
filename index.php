@@ -7,15 +7,16 @@ include __DIR__ .'/includes/Memo.php';
 //Nella memo fai 2 funzioni che fanno query in base alla priorità o al fatto o no 
 //nella index i bottoni viaggiano con la parola chiave che fa la stringa esatta di comparazione query
 
-// if(isset($_GET['option'])){
-//     $promemoria = funzione show Priority;
-// }else if(isset($_GET['done'])){
-//     $promemoria = funzione showDone;
-// } else {
-//     $promemoria= \Datafather\Memo::selectMemo();
-// }
+// NB quando filtri non accetta 0 quindi adesso 1= da fare e 2= fatto 
+//  var_dump($_GET['done']);
+ if(isset($_GET['done'])){
+     $promemoria = \Datafather\Memo::showStatus($_GET['done']);
+    }else if(isset($_GET['imp'])){
+     $promemoria = \Datafather\Memo::showPriority($_GET['imp']);
+    } else {
+     $promemoria= \Datafather\Memo::selectMemo();
+}
 
-$promemoria= \Datafather\Memo::selectMemo();
 
 
 
@@ -36,23 +37,23 @@ $promemoria= \Datafather\Memo::selectMemo();
        <header class="masthead">
             <div class="container h-100">
                 <div class="row h-100 align-items-center justify-content-center">
-                    <div class="col-12 col-md-6 text-center card p-5">
+                    <div class="col-12 col-md-6 text-center card p-5 bg-warning">
                         <form action="insert.php" method="POST">
                             
-                            <label class="form-label" for="promemoria">Scrivi il tuo promemoria</label>
+                            <label class="form-label fw-bold my-2" for="promemoria">Scrivi il tuo promemoria</label>
                             <input class="form-control" type="text" name="promemoria" id="promemoria">
 
-                            <label class="form-label">Seleziona priorità</label>
+                            <label class="form-label fw-bold my-2">Seleziona priorità</label>
                             <select name="priorità" class="form-select">
                                 <option value="Bassa">Bassa</option>
                                 <option value="Media">Media</option>
                                 <option value="Alta">Alta</option>
                             </select>
 
-                            <label class="form-label">Fatto o da fare?</label>
+                            <label class="form-label fw-bold my-2">Fatto o da fare?</label>
                             <select name="completato" class="form-select">
-                                <option value="0">Da Fare</option>
-                                <option value="1">Fatto</option>
+                                <option value="1">Da Fare</option>
+                                <option value="2">Fatto</option>
                             </select>         
 
                             <input class="btn btn-outline-dark my-3" type="submit" value="Invia">
@@ -63,20 +64,12 @@ $promemoria= \Datafather\Memo::selectMemo();
             </div>
         </header>
 
+    <?php include __DIR__ .'/includes/filterbar.php'; ?>
 
-    <section class="container">
+
+
+    <section class="container my-5">
         <div class="row">
-<!-- 
-            <div class="col-12 my-5">
-                <a href="" class="btn btn-danger">fatti</a>
-                <a href="" class="btn btn-danger">Da fare</a>
-                <a href="" class="btn btn-danger">Priorità alta</a>
-                <a href="" class="btn btn-danger">Priorità media</a>
-                <a href="" class="btn btn-danger">Priorità bassa</a>
-            </div> -->
-            <div class="col-12 text-end my-5">
-                <a href="cancella-memo.php" class="btn btn-danger">Elimina tutto</a>
-            </div>
        
      <?php foreach ($promemoria as $item): ?> 
 
@@ -85,7 +78,7 @@ $promemoria= \Datafather\Memo::selectMemo();
                 <p># <?php echo $item['id']; ?></p>
                 <h2><?php echo $item['promemoria']; ?></h2>
                 <p><?php echo $item['priorità']; ?></p>
-                <p><?php $item['completato'] == 0 ? printf("Da Fare")  : printf("Fatto")  ; ?></p>
+                <p><?php $item['completato'] == 1 ? printf("Da Fare")  : printf("Fatto")  ; ?></p>
                 <p><?php echo $item['creazione'];?></p>
                 <a href="modifica.php?id=<?php echo $item['id'];?>" class="btn btn-outline-warning rounded-pill my-1">✏️</a> 
                 <a href="cancella-memo.php?id=<?php echo $item['id'];?>" class="btn btn-outline-danger rounded-pill my-1">❌</a>

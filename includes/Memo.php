@@ -169,5 +169,71 @@ class Memo {
         }
     }
 
+    public static function showStatus($done){
+
+        $mysqli = new mysqli("127.0.0.1", "root", "rootroot", "todolist");
+        
+        if ($mysqli->connect_errno) {
+            echo "Connessione al database fallita: " . $mysqli->connect_error;
+            exit();
+        }
+
+
+        if($done){
+
+            $query = $mysqli->query("SELECT * FROM lista WHERE completato = " . $done);
+         }else{
+            
+            $query = $mysqli->query("SELECT * FROM lista");
+        }
+        
+
+
+        $results=[];
+
+        if($query->num_rows > 0){
+            
+            while ($row = $query->fetch_assoc()) {
+                $results[] = $row;
+            }      
+        }
+
+        return $results;
+
+    }
+
+    public static function showPriority($imp){
+
+        $mysqli = new mysqli("127.0.0.1", "root", "rootroot", "todolist");
+        
+        if ($mysqli->connect_errno) {
+            echo "Connessione al database fallita: " . $mysqli->connect_error;
+            exit();
+        }
+
+
+        if($imp){
+
+            $query = $mysqli->query("SELECT * FROM lista WHERE priorità = '$imp' ");
+         }else{
+            
+            $query = $mysqli->query("SELECT * FROM lista");
+        }
+        
+
+
+        $results=[];
+
+        if($query->num_rows > 0){
+            
+            while ($row = $query->fetch_assoc()) {
+                $results[] = $row;
+            }      
+        }
+
+        return $results;
+
+    }
+
 }
   
