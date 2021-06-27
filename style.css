@@ -6,3 +6,12 @@
     background-position: center;
     background-repeat: no-repeat;
   }
+
+.card-custom{
+  border: 1px solid black;
+  background-color: rgb(231, 230, 224);
+  transition: 0.5s;
+}
+.card-custom:hover{
+  transform: scale(1.1);
+}

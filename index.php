@@ -73,15 +73,17 @@ include __DIR__ .'/includes/Memo.php';
        
      <?php foreach ($promemoria as $item): ?> 
 
-            <div class="col-12 col-md-3 card p-3 m-3">
+            <div class="col-12 col-md-3 m-3 p-3 card-custom">
 
+                <div class="text-end">
+                    <a href="modifica.php?id=<?php echo $item['id'];?>" class="btn btn-outline-warning rounded-pill my-1">✏️</a> 
+                    <a href="cancella-memo.php?id=<?php echo $item['id'];?>" class="btn btn-outline-danger rounded-pill my-1">❌</a>
+                </div>
                 <p># <?php echo $item['id']; ?></p>
                 <h2><?php echo $item['promemoria']; ?></h2>
-                <p><?php echo $item['priorità']; ?></p>
-                <p><?php $item['completato'] == 1 ? printf("Da Fare")  : printf("Fatto")  ; ?></p>
-                <p><?php echo $item['creazione'];?></p>
-                <a href="modifica.php?id=<?php echo $item['id'];?>" class="btn btn-outline-warning rounded-pill my-1">✏️</a> 
-                <a href="cancella-memo.php?id=<?php echo $item['id'];?>" class="btn btn-outline-danger rounded-pill my-1">❌</a>
+                <p>#Priorità : <?php echo $item['priorità']; ?></p>
+                <p>#Status : <?php $item['completato'] == 1 ? printf("Da Fare")  : printf("Fatto")  ; ?></p>
+                <p>Pubblicato il : <?php echo implode("-",array_reverse(explode("-",$item['creazione'])));?></p>
             
             </div>
 
