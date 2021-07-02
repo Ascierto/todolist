@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . '/includes/Memo.php';
+include_once __DIR__ . '/includes/globals.php';
 
 
 if (isset($_GET['id'])) {

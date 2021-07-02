@@ -2,6 +2,8 @@
 
 namespace Datafather;
 
+include __DIR__ . '/db.php';
+
 use mysqli;
 
 class Memo {
@@ -17,14 +19,7 @@ class Memo {
         );
 
         
-
-        $mysqli = new mysqli("127.0.0.1", "root", "rootroot", "todolist");
-        
-        if ($mysqli->connect_errno) {
-            echo "Connessione al database fallita: " . $mysqli->connect_error;
-            exit();
-        }
-        
+        $db = connect();
         var_dump('Connessione stabilita');
         
         $memo = $formdata['promemoria'];
@@ -34,7 +29,7 @@ class Memo {
         var_dump($formdata);
         
         
-        $query = $mysqli->prepare("INSERT INTO lista(promemoria,priorità,completato,creazione) VALUES (?,?,?, NOW())");
+        $query = $db->prepare("INSERT INTO lista(promemoria,priorità,completato,creazione) VALUES (?,?,?, NOW())");
         
         $query->bind_param('ssi',$memo,$priority,$done);
         
@@ -49,26 +44,20 @@ class Memo {
         header('Location: http://localhost:8888/todolist/index.php?stato=ok');
         exit;
         
-        $mysqli->close();
+        $db->close();
 
     }
 
     public static function selectMemo($args= null){
 
-        $mysqli = new mysqli("127.0.0.1", "root", "rootroot", "todolist");
-        
-        if ($mysqli->connect_errno) {
-            echo "Connessione al database fallita: " . $mysqli->connect_error;
-            exit();
-        }
-
+        $db = connect();
 
         if(isset($args['id'])){
             $args['id'] = intval($args['id']);
-            $query = $mysqli->query("SELECT * FROM lista WHERE id = " . $args['id']);
+            $query = $db->query("SELECT * FROM lista WHERE id = " . $args['id']);
         }else{
             
-            $query = $mysqli->query("SELECT * FROM lista");
+            $query = $db->query("SELECT * FROM lista");
         }
         
 
@@ -95,20 +84,15 @@ class Memo {
 
         if($formdata){
 
-            $mysqli = new mysqli("127.0.0.1", "root", "rootroot", "todolist");
-        
-            if ($mysqli->connect_errno) {
-                echo "Connessione al database fallita: " . $mysqli->connect_error;
-                exit();
-            }
+            $db = connect();
 
             $id = intval($id);
             
 
             try {
-                $query = $mysqli->prepare('UPDATE lista SET promemoria= ?, priorità = ?, completato = ?, creazione=Now() WHERE id = ?');
+                $query = $db->prepare('UPDATE lista SET promemoria= ?, priorità = ?, completato = ?, creazione=Now() WHERE id = ?');
                 if (is_bool($query)) {
-                    throw new \Exception('Query non valida. $mysqli->prepare ha restituito false.');
+                    throw new \Exception('Query non valida. $db->prepare ha restituito false.');
                 }
                 $query->bind_param('ssii', $formdata['promemoria'], $formdata['priorità'],$formdata['completato'], $id);
                 $query->execute();
@@ -125,25 +109,20 @@ class Memo {
             header('Location: http://localhost:8888/todolist/index.php?stato=ok');
             exit;
             
-            $mysqli->close();
+            $db->close();
         }
 
     }
 
     public static function deleteMemo($id = null){
 
-        $mysqli = new mysqli("127.0.0.1", "root", "rootroot", "todolist");
-        
-        if ($mysqli->connect_errno) {
-            echo "Connessione al database fallita: " . $mysqli->connect_error;
-            exit();
-        }
+        $db = connect();
 
         if ( $id ) {
 
             $id = intval($id);
     
-            $query = $mysqli->prepare('DELETE FROM lista WHERE id = ?');
+            $query = $db->prepare('DELETE FROM lista WHERE id = ?');
             $query->bind_param('i', $id);
             $query->execute();
     
@@ -157,7 +136,7 @@ class Memo {
 
         }else{
 
-            $query = $mysqli->query('DELETE FROM lista');
+            $query = $db->query('DELETE FROM lista');
             
             if ($query->affected_rows > 0) {
                 header('Location: http://localhost:8888/todolist/?statocanc=ok');
@@ -171,20 +150,15 @@ class Memo {
 
     public static function showStatus($done){
 
-        $mysqli = new mysqli("127.0.0.1", "root", "rootroot", "todolist");
-        
-        if ($mysqli->connect_errno) {
-            echo "Connessione al database fallita: " . $mysqli->connect_error;
-            exit();
-        }
+        $db = connect();
 
 
         if($done){
 
-            $query = $mysqli->query("SELECT * FROM lista WHERE completato = " . $done);
+            $query = $db->query("SELECT * FROM lista WHERE completato = " . $done);
          }else{
             
-            $query = $mysqli->query("SELECT * FROM lista");
+            $query = $db->query("SELECT * FROM lista");
         }
         
 
@@ -204,20 +178,14 @@ class Memo {
 
     public static function showPriority($imp){
 
-        $mysqli = new mysqli("127.0.0.1", "root", "rootroot", "todolist");
-        
-        if ($mysqli->connect_errno) {
-            echo "Connessione al database fallita: " . $mysqli->connect_error;
-            exit();
-        }
-
+        $db = connect();
 
         if($imp){
 
-            $query = $mysqli->query("SELECT * FROM lista WHERE priorità = '$imp' ");
+            $query = $db->query("SELECT * FROM lista WHERE priorità = '$imp' ");
          }else{
             
-            $query = $mysqli->query("SELECT * FROM lista");
+            $query = $db->query("SELECT * FROM lista");
         }
         
 
